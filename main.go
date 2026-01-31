@@ -2,19 +2,22 @@ package main
 
 import (
 	"fmt"
-	"time"
+	"sync"
 )
 
 func main() {
 	recipientChannel := make(chan Recipient);
 	go func() {
-		defer close(recipientChannel)
 	err := loadRecipients("./email.csv",recipientChannel)
 	if err != nil {
 		fmt.Println("Error loading recipients:", err)
 	}
 }()
-	emailWorker(1, recipientChannel)
-
-	time.Sleep(3*time.Second)
+	var wg sync.WaitGroup;
+	workerCount := 3
+	for i:=1; i<=workerCount; i++ {
+		wg.Add(1)
+		go emailWorker(i, recipientChannel,&wg);
+	}
+	wg.Wait()
 }

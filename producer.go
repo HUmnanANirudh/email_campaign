@@ -10,7 +10,7 @@ type Recipient struct {
 }
 
 func loadRecipients(filepath string, ch chan Recipient) error {
-
+	defer close(ch);
 	f, err := os.Open(filepath);
 	if err != nil {
 		return err;
