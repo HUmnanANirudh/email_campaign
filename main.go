@@ -3,5 +3,8 @@ package main
 import "fmt"
 
 func main() {
-	fmt.Println("hello world")
+	err := loadRecipients("./email_campaign_test.csv")
+	if err != nil {
+		fmt.Println("Error loading recipients:", err)
+	}
 }
