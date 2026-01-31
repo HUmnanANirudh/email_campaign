@@ -11,7 +11,7 @@ import (
 func main() {
 	recipientChannel := make(chan Recipient);
 	go func() {
-	err := loadRecipients("./email.csv",recipientChannel)
+	err := loadRecipients("../email.csv",recipientChannel)
 	if err != nil {
 		fmt.Println("Error loading recipients:", err)
 	}
