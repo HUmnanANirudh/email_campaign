@@ -1,7 +1,9 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
+	"html/template"
 	"runtime"
 	"sync"
 )
@@ -21,4 +23,18 @@ func main() {
 		go emailWorker(i, recipientChannel,&wg);
 	}
 	wg.Wait()
+}
+
+func executeTemplate(r Recipient) (string, error) {
+	t, err := template.ParseFiles("email.tmpl")
+	if err != nil {
+		return "", err
+	}
+
+	var tpl bytes.Buffer
+	err = t.Execute(&tpl, r)
+	if err != nil {
+		return "", err
+	}
+	return tpl.String(), nil
 }
