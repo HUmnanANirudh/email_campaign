@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"runtime"
 	"sync"
 )
 
@@ -14,7 +15,7 @@ func main() {
 	}
 }()
 	var wg sync.WaitGroup;
-	workerCount := 3
+	workerCount := runtime.NumCPU();
 	for i:=1; i<=workerCount; i++ {
 		wg.Add(1)
 		go emailWorker(i, recipientChannel,&wg);
