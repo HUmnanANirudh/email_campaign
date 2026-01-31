@@ -76,21 +76,21 @@ export function CsvUploadSection({
 
   if (isUploaded) {
     return (
-      <Card className="border-emerald-200 bg-emerald-50/50">
+      <Card className="border-primary/20 bg-primary/10">
         <CardContent className="p-6 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <div className="h-10 w-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600">
+            <div className="h-10 w-10 rounded-full bg-primary/20 flex items-center justify-center text-primary">
               <FileText className="h-5 w-5" />
             </div>
             <div>
-              <p className="font-medium text-emerald-900 flex items-center gap-2">
+              <p className="font-medium text-foreground flex items-center gap-2">
                 {filename}
-                <span className="inline-flex items-center text-xs font-medium text-emerald-600 bg-emerald-100 px-2 py-0.5 rounded-full">
+                <span className="inline-flex items-center text-xs font-medium text-primary bg-primary/20 px-2 py-0.5 rounded-full">
                   <CheckCircle2 className="w-3 h-3 mr-1" />
                   Uploaded
                 </span>
               </p>
-              <p className="text-sm text-emerald-600/80">
+              <p className="text-sm text-primary">
                 {rowCount?.toLocaleString()} recipients detected
               </p>
             </div>
@@ -99,7 +99,7 @@ export function CsvUploadSection({
             variant="ghost"
             size="icon"
             onClick={onClear}
-            className="text-emerald-600 hover:text-emerald-700 hover:bg-emerald-100"
+            className="text-primary hover:text-primary hover:bg-primary/20"
           >
             <X className="h-5 w-5" />
           </Button>
@@ -111,7 +111,7 @@ export function CsvUploadSection({
   return (
     <Card className={cn(
       "transition-colors duration-200",
-      isDragging ? "border-indigo-500 bg-indigo-50/50" : "border-dashed hover:border-indigo-300 hover:bg-slate-50"
+      isDragging ? "border-primary bg-primary/5" : "border-dashed hover:border-primary/50 hover:bg-muted/50"
     )}>
       <CardContent className="p-0">
         <div
@@ -131,7 +131,7 @@ export function CsvUploadSection({
           
           <div className={cn(
             "h-12 w-12 rounded-xl flex items-center justify-center mb-4 transition-transform duration-200",
-            isDragging ? "bg-indigo-100 text-indigo-600 scale-110" : "bg-slate-100 text-slate-400"
+            isDragging ? "bg-primary/20 text-primary scale-110" : "bg-muted text-muted-foreground"
           )}>
             <UploadCloud className="h-6 w-6" />
           </div>
@@ -151,7 +151,7 @@ export function CsvUploadSection({
           )}
           
           {isLoading && (
-            <p className="text-sm text-indigo-600 animate-pulse mt-2">
+            <p className="text-sm text-primary animate-pulse mt-2">
               Parsing CSV file...
             </p>
           )}

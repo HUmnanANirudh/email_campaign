@@ -13,7 +13,7 @@ export function SendButton({ onClick, disabled }: SendButtonProps) {
       size="lg"
       className={cn(
         "w-full text-lg font-semibold h-14 transition-all duration-200",
-        !disabled && "hover:scale-[1.02] shadow-lg shadow-indigo-500/20 hover:shadow-indigo-500/30"
+        !disabled && "hover:scale-[1.02] shadow-lg shadow-primary/20 hover:shadow-primary/30"
       )}
       onClick={onClick}
       disabled={disabled}

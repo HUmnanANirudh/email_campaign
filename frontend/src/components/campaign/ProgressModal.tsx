@@ -28,7 +28,7 @@ export function ProgressModal({ open, stats, onDownloadLogs, onReset }: Progress
         <DialogHeader className="flex flex-col items-center text-center space-y-4 pt-4">
           <div className={cn(
             "h-16 w-16 rounded-full flex items-center justify-center transition-all duration-500",
-            isFinished ? "bg-emerald-100 text-emerald-600" : "bg-indigo-100 text-indigo-600"
+            isFinished ? "bg-primary/20 text-primary" : "bg-primary/20 text-primary"
           )}>
             {isFinished ? (
               <PartyPopper className="h-8 w-8 animate-bounce" />
@@ -61,17 +61,17 @@ export function ProgressModal({ open, stats, onDownloadLogs, onReset }: Progress
           )}
 
           <div className="grid grid-cols-3 gap-4 text-center">
-            <div className="bg-slate-50 p-3 rounded-lg border border-slate-100">
-              <div className="text-2xl font-bold text-slate-900">{stats.sent}</div>
-              <div className="text-xs font-medium text-slate-500 uppercase tracking-wide">Sent</div>
+            <div className="bg-muted/50 p-3 rounded-lg border border-border">
+              <div className="text-2xl font-bold text-foreground">{stats.sent}</div>
+              <div className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Sent</div>
             </div>
-            <div className="bg-red-50 p-3 rounded-lg border border-red-100">
-              <div className="text-2xl font-bold text-red-600">{stats.failed}</div>
-              <div className="text-xs font-medium text-red-500 uppercase tracking-wide">Failed</div>
+            <div className="bg-destructive/10 p-3 rounded-lg border border-destructive/20">
+              <div className="text-2xl font-bold text-destructive">{stats.failed}</div>
+              <div className="text-xs font-medium text-destructive uppercase tracking-wide">Failed</div>
             </div>
-            <div className="bg-slate-50 p-3 rounded-lg border border-slate-100">
-              <div className="text-2xl font-bold text-slate-400">{stats.pending}</div>
-              <div className="text-xs font-medium text-slate-400 uppercase tracking-wide">Pending</div>
+            <div className="bg-muted/50 p-3 rounded-lg border border-border">
+              <div className="text-2xl font-bold text-muted-foreground">{stats.pending}</div>
+              <div className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Pending</div>
             </div>
           </div>
         </div>

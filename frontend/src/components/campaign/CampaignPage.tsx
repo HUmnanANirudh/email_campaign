@@ -104,20 +104,20 @@ export function CampaignPage() {
     body.trim().length > 0;
 
   return (
-    <div className="min-h-screen bg-slate-50/50 font-sans">
+    <div className="min-h-screen bg-muted/40 font-sans">
       <Header />
       
       <main className="container max-w-screen-2xl mx-auto px-8 py-8">
         <div className="mb-12">
-          <h1 className="text-4xl font-bold text-slate-900 mb-2">Create Campaign</h1>
-          <p className="text-xl text-slate-600">Upload your audience, configure your credentials, and blast personalized messages in seconds.</p>
+          <h1 className="text-4xl font-bold text-foreground mb-2">Create Campaign</h1>
+          <p className="text-xl text-muted-foreground">Upload your audience, configure your credentials, and blast personalized messages in seconds.</p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* Left Column */}
           <div className="space-y-8 lg:col-span-5">
             <div className="space-y-4">
-              <h2 className="text-lg font-semibold text-slate-900">1. Add Recipients</h2>
+              <h2 className="text-lg font-semibold text-foreground">1. Add Recipients</h2>
               <CsvUploadSection 
                 onUpload={handleUpload}
                 onClear={handleClearCsv}
@@ -128,7 +128,7 @@ export function CampaignPage() {
             </div>
 
             <div className="space-y-4">
-              <h2 className="text-lg font-semibold text-slate-900">2. Configure Sender</h2>
+              <h2 className="text-lg font-semibold text-foreground">2. Configure Sender</h2>
               <ApiKeySection 
                 onValidate={handleApiValidate}
                 isValid={isApiKeyValid}
@@ -139,7 +139,7 @@ export function CampaignPage() {
           {/* Right Column */}
           <div className="space-y-8 lg:col-span-7 flex flex-col">
             <div className="space-y-4 flex-1 flex flex-col">
-              <h2 className="text-lg font-semibold text-slate-900">3. Create Template</h2>
+              <h2 className="text-lg font-semibold text-foreground">3. Create Template</h2>
               <EmailTemplateEditor 
                 subject={subject}
                 setSubject={setSubject}
@@ -149,12 +149,12 @@ export function CampaignPage() {
             </div>
           </div>
         </div>
-        <div className="pt-4 border-t border-slate-200/60 flex items-center justify-center mt-8">
+        <div className="pt-4 border-t border-border/60 flex items-center justify-center mt-8">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between sm:gap-12">
             <div className="flex flex-col gap-4">
               <div>
-                <h2 className="text-lg font-semibold text-slate-900 mb-1">4. Launch</h2>
-                <p className="text-sm text-slate-500">Ready for takeoff?</p>
+                <h2 className="text-lg font-semibold text-foreground mb-1">4. Launch</h2>
+                <p className="text-sm text-muted-foreground">Ready for takeoff?</p>
               </div>
               <StatusIndicators 
                 isCsvUploaded={csvData.length > 0}

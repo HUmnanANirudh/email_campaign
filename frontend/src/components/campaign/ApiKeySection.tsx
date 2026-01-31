@@ -27,7 +27,7 @@ export function ApiKeySection({ onValidate, isValid }: ApiKeySectionProps) {
     <Card>
       <CardHeader>
         <CardTitle className="text-lg font-semibold flex items-center gap-2">
-          <Key className="h-5 w-5 text-indigo-600" />
+          <Key className="h-5 w-5 text-primary" />
           SendGrid Configuration
         </CardTitle>
       </CardHeader>
@@ -38,7 +38,7 @@ export function ApiKeySection({ onValidate, isValid }: ApiKeySectionProps) {
             <Input
               type="password"
               placeholder="SG.xxxxxxxxxxxx"
-              className={cn("pl-9", isValid && "border-emerald-500 text-emerald-700")}
+              className={cn("pl-9", isValid && "border-primary text-primary")}
               value={apiKey}
               onChange={(e) => setApiKey(e.target.value)}
               disabled={isValid}
@@ -50,7 +50,7 @@ export function ApiKeySection({ onValidate, isValid }: ApiKeySectionProps) {
             disabled={!apiKey || isTesting || isValid}
             className={cn(
                 "min-w-25", 
-                isValid && "border-emerald-200 text-emerald-700 bg-emerald-50 hover:bg-emerald-100 hover:text-emerald-800"
+                isValid && "border-primary/20 text-primary bg-primary/10 hover:bg-primary/20 hover:text-primary"
             )}
           >
             {isTesting ? (
@@ -66,8 +66,8 @@ export function ApiKeySection({ onValidate, isValid }: ApiKeySectionProps) {
           </Button>
         </div>
         
-        <div className="flex items-center gap-2 text-xs text-muted-foreground bg-slate-50 p-2 rounded-md border border-slate-100">
-          <ShieldCheck className="h-3.5 w-3.5 text-indigo-500" />
+        <div className="flex items-center gap-2 text-xs text-muted-foreground bg-muted/50 p-2 rounded-md border border-border">
+          <ShieldCheck className="h-3.5 w-3.5 text-primary" />
           Keys are processed locally and never stored on our servers.
         </div>
       </CardContent>
