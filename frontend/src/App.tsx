@@ -1,7 +1,9 @@
-import { ComponentExample } from "@/components/component-example";
+import { CampaignPage } from "@/components/campaign/CampaignPage";
 
-export function App() {
-return <ComponentExample />;
+function App() {
+  return (
+    <CampaignPage />
+  );
 }
 
 export default App;
