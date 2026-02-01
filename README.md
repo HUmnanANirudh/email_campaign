@@ -4,8 +4,6 @@ A email campaign platform that sends personalized emails to multiple recipients 
 
 <img width="1855" height="870" alt="image" src="https://github.com/user-attachments/assets/2c5ac3f9-6df7-4764-971c-9705db1a3b00" />
 
-Live Preview: https://mailflow-production-708e.up.railway.app/
-
 ## Architecture
 
 ```
