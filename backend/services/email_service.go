@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"html/template"
 	"net/http"
-
 	"github.com/HUmnanANirudh/email_campaign/models"
 )
 
@@ -30,10 +29,7 @@ type Content struct {
 	Type  string `json:"type"`
 	Value string `json:"value"`
 }
-
-// ExecuteTemplate renders the email subject and body with recipient data
 func ExecuteTemplate(subject, body string, r models.Recipient) (string, string, error) {
-	// Parse subject template
 	subjectTmpl, err := template.New("subject").Parse(subject)
 	if err != nil {
 		return "", "", err
@@ -42,8 +38,6 @@ func ExecuteTemplate(subject, body string, r models.Recipient) (string, string, 
 	if err := subjectTmpl.Execute(&subjectBuf, r); err != nil {
 		return "", "", err
 	}
-
-	// Parse body template
 	bodyTmpl, err := template.New("body").Parse(body)
 	if err != nil {
 		return "", "", err
@@ -55,8 +49,6 @@ func ExecuteTemplate(subject, body string, r models.Recipient) (string, string, 
 
 	return subjectBuf.String(), bodyBuf.String(), nil
 }
-
-// SendViaSendGrid sends an email using the SendGrid API
 func SendViaSendGrid(toEmail, toName, subject, htmlBody, apiKey, fromEmail, fromName string) error {
 	message := SendGridMessage{
 		Personalizations: []Personalization{

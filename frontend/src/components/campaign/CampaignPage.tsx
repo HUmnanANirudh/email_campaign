@@ -8,7 +8,7 @@ import { SendButton } from "./SendButton";
 import { ProgressModal, type CampaignStats } from "./ProgressModal";
 import type { CsvRow } from "@/lib/csvParser";
 
-const BACKEND_URL = "http://localhost:8080";
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "";
 
 export function CampaignPage() {
   const [csvData, setCsvData] = useState<CsvRow[]>([]);

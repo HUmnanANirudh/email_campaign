@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"runtime"
 	"sync"
-
 	"github.com/HUmnanANirudh/email_campaign/models"
 	"github.com/HUmnanANirudh/email_campaign/workers"
 )
@@ -50,20 +49,13 @@ func HandleCampaign(w http.ResponseWriter, r *http.Request) {
 }
 
 func ProcessCampaign(req models.CampaignRequest) models.CampaignResponse {
-	// Create channels for producer-consumer pattern
 	jobs := make(chan models.EmailJob, len(req.Recipients))
 	results := make(chan models.EmailResult, len(req.Recipients))
-
-	// Use default sender name if not provided
 	fromName := req.FromName
 	if fromName == "" {
 		fromName = "Campaign Sender"
 	}
-
-	// Start producer goroutine
 	go workers.Producer(jobs, req.Recipients, req.Subject, req.Body, req.ApiKey, req.FromEmail, fromName)
-
-	// Start consumer workers
 	var wg sync.WaitGroup
 	workerCount := runtime.NumCPU()
 	if workerCount > len(req.Recipients) {
@@ -76,14 +68,10 @@ func ProcessCampaign(req models.CampaignRequest) models.CampaignResponse {
 		wg.Add(1)
 		go workers.Consumer(i, jobs, results, &wg)
 	}
-
-	// Wait for all workers to finish and close results channel
 	go func() {
 		wg.Wait()
 		close(results)
 	}()
-
-	// Collect results
 	response := models.CampaignResponse{
 		Total:  len(req.Recipients),
 		Errors: []string{},

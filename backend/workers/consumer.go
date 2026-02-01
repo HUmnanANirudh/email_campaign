@@ -3,12 +3,9 @@ package workers
 import (
 	"fmt"
 	"sync"
-
 	"github.com/HUmnanANirudh/email_campaign/models"
 	"github.com/HUmnanANirudh/email_campaign/services"
 )
-
-// Consumer processes email jobs from the job channel
 func Consumer(id int, jobs <-chan models.EmailJob, results chan<- models.EmailResult, wg *sync.WaitGroup) {
 	defer wg.Done()
 
@@ -16,8 +13,6 @@ func Consumer(id int, jobs <-chan models.EmailJob, results chan<- models.EmailRe
 		result := models.EmailResult{
 			Email: job.Recipient.Email,
 		}
-
-		// Execute templates
 		parsedSubject, parsedBody, err := services.ExecuteTemplate(job.Subject, job.Body, job.Recipient)
 		if err != nil {
 			result.Success = false
@@ -26,8 +21,6 @@ func Consumer(id int, jobs <-chan models.EmailJob, results chan<- models.EmailRe
 			results <- result
 			continue
 		}
-
-		// Send via SendGrid
 		err = services.SendViaSendGrid(job.Recipient.Email, job.Recipient.Name, parsedSubject, parsedBody, job.ApiKey, job.FromEmail, job.FromName)
 		if err != nil {
 			result.Success = false

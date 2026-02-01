@@ -15,6 +15,7 @@ backend/
 │   ├── producer.go         # Produces email jobs from recipients
 │   └── consumer.go         # Consumes jobs and sends emails
 ├── go.mod                  # Go module definition
+├── README.md                     
 ```
 
 ## Architecture
