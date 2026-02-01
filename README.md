@@ -1,6 +1,10 @@
-# Email Campaign Application
+# MailFlow
 
 A email campaign platform that sends personalized emails to multiple recipients using SendGrid. Built with Go backend and React frontend.Using a producer-consumer pattern for parallel email processing.
+
+<img width="1855" height="870" alt="image" src="https://github.com/user-attachments/assets/2c5ac3f9-6df7-4764-971c-9705db1a3b00" />
+
+Live Preview: https://mailflow-production-708e.up.railway.app/
 
 ## Architecture
 
@@ -23,7 +27,7 @@ Recipients receive emails
 ## Tech Stack
 
 ### Backend
-- **Language**: Go 1.23
+- **Language**: Go 1.25.5
 - **Architecture**: Producer-Consumer with goroutines
 - **Email Service**: SendGrid API
 - **Server**: Native `net/http`
@@ -35,7 +39,6 @@ Recipients receive emails
 - **Icons**: Lucide React
 
 ## Quick Start
-
 ### Prerequisites
 - Go 1.23+ (for backend development)
 - Node.js 20+ (for frontend development)
