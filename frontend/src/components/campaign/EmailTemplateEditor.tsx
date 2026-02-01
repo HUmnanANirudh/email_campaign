@@ -26,7 +26,7 @@ export function EmailTemplateEditor({
   const previewHtml = renderEmailPreview(body, mockData);
 
   return (
-    <Card className="flex flex-col h-full min-h-">
+    <Card className="flex flex-col h-full ">
       <Tabs defaultValue="write" className="flex flex-col h-full">
         <div className="flex items-center justify-between px-6 border-b border-border/50">
           <div className="font-semibold">Email Template</div>

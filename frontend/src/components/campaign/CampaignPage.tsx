@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import { Header } from "./Header";
 import { CsvUploadSection } from "./CsvUploadSection";
 import { ApiKeySection } from "./ApiKeySection";
@@ -8,10 +8,15 @@ import { SendButton } from "./SendButton";
 import { ProgressModal, type CampaignStats } from "./ProgressModal";
 import type { CsvRow } from "@/lib/csvParser";
 
+const BACKEND_URL = "http://localhost:8080";
+
 export function CampaignPage() {
   const [csvData, setCsvData] = useState<CsvRow[]>([]);
   const [csvFilename, setCsvFilename] = useState("");
   const [isApiKeyValid, setIsApiKeyValid] = useState(false);
+  const [apiKey, setApiKey] = useState("");
+  const [fromEmail, setFromEmail] = useState("");
+  const [fromName, setFromName] = useState("");
   
   const [subject, setSubject] = useState("");
   const [body, setBody] = useState("");
@@ -23,8 +28,8 @@ export function CampaignPage() {
     pending: 0,
     total: 0,
   });
-  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const processingRef = useRef<CsvRow[]>([]);
+  const [isSending, setIsSending] = useState(false);
+  const [errorMessages, setErrorMessages] = useState<string[]>([]);
 
   const handleUpload = (data: CsvRow[], filename: string) => {
     setCsvData(data);
@@ -36,51 +41,84 @@ export function CampaignPage() {
     setCsvFilename("");
   };
 
-  const handleApiValidate = () => {
+  const handleApiValidate = (key: string) => {
     setIsApiKeyValid(true);
+    setApiKey(key);
   };
 
-  const startCampaign = () => {
-    if (csvData.length === 0) return;
+  const startCampaign = async () => {
+    if (csvData.length === 0 || !apiKey) return;
 
     setShowModal(true);
+    setIsSending(true);
     setStats({
       sent: 0,
       failed: 0,
       pending: csvData.length,
       total: csvData.length,
     });
+    setErrorMessages([]);
     
-    processingRef.current = [...csvData];
-    
-    if (timerRef.current) clearInterval(timerRef.current);
+    try {
+      // Prepare data for backend
+      const recipients = csvData.map(row => ({
+        Name: row.Name || row.name || '',
+        Email: row.Email || row.email || '',
+      }));
 
-    timerRef.current = setInterval(() => {
-      setStats((prev) => {
-        if (prev.pending <= 0) {
-          if (timerRef.current) clearInterval(timerRef.current);
-          return prev;
-        }
-
-        const isFailure = Math.random() < 0.05; // 5% failure rate
-        
-        return {
-          ...prev,
-          sent: prev.sent + (isFailure ? 0 : 1),
-          failed: prev.failed + (isFailure ? 1 : 0),
-          pending: prev.pending - 1,
-          total: prev.total,
-        };
+      const response = await fetch(`${BACKEND_URL}/api/campaign`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          recipients,
+          subject,
+          body,
+          apiKey,
+          fromEmail,
+          fromName,
+        }),
       });
-    }, 100);
+
+      if (!response.ok) {
+        throw new Error(`Backend error: ${response.statusText}`);
+      }
+
+      const result = await response.json();
+      
+      setStats({
+        sent: result.sent || 0,
+        failed: result.failed || 0,
+        pending: 0,
+        total: result.total || csvData.length,
+      });
+      
+      if (result.errors && result.errors.length > 0) {
+        setErrorMessages(result.errors);
+      }
+    } catch (error) {
+      console.error('Campaign failed:', error);
+      setStats(prev => ({
+        ...prev,
+        failed: prev.total,
+        pending: 0,
+      }));
+      setErrorMessages([`Failed to send campaign: ${error instanceof Error ? error.message : 'Unknown error'}`]);
+    } finally {
+      setIsSending(false);
+    }
   };
 
   const resetCampaign = () => {
     setShowModal(false);
+    setErrorMessages([]);
   };
 
   const downloadErrorLog = () => {
-    const content = "Error logs would be here...";
+    const content = errorMessages.length > 0 
+      ? errorMessages.join('\n') 
+      : "No errors recorded";
     const blob = new Blob([content], { type: "text/plain" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -91,15 +129,11 @@ export function CampaignPage() {
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
   };
-  useEffect(() => {
-    return () => {
-      if (timerRef.current) clearInterval(timerRef.current);
-    };
-  }, []);
 
   const isFormValid = 
     csvData.length > 0 && 
     isApiKeyValid && 
+    fromEmail.trim().length > 0 &&
     subject.trim().length > 0 && 
     body.trim().length > 0;
 
@@ -132,6 +166,10 @@ export function CampaignPage() {
               <ApiKeySection 
                 onValidate={handleApiValidate}
                 isValid={isApiKeyValid}
+                fromEmail={fromEmail}
+                setFromEmail={setFromEmail}
+                fromName={fromName}
+                setFromName={setFromName}
               />
             </div>
           </div>
@@ -147,10 +185,7 @@ export function CampaignPage() {
                 setBody={setBody}
               />
             </div>
-          </div>
-        </div>
-        <div className="pt-4 border-t border-border/60 flex items-center justify-center mt-8">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between sm:gap-12">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between sm:gap-12">
             <div className="flex flex-col gap-4">
               <div>
                 <h2 className="text-lg font-semibold text-foreground mb-1">4. Launch</h2>
@@ -164,10 +199,13 @@ export function CampaignPage() {
             <div className="w-full sm:w-auto sm:min-w-50">
               <SendButton 
                 onClick={startCampaign}
-                disabled={!isFormValid}
+                disabled={!isFormValid || isSending}
               />
             </div>
           </div>
+          </div>
+        </div>
+        <div className="pt-4 border-t border-border/60 flex items-center justify-center mt-8">
         </div>
       </main>
 

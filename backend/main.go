@@ -1,40 +1,17 @@
 package main
 
 import (
-	"bytes"
 	"fmt"
-	"html/template"
-	"runtime"
-	"sync"
+	"log"
+	"net/http"
+
+	"github.com/HUmnanANirudh/email_campaign/handlers"
 )
 
 func main() {
-	recipientChannel := make(chan Recipient);
-	go func() {
-	err := loadRecipients("../email.csv",recipientChannel)
-	if err != nil {
-		fmt.Println("Error loading recipients:", err)
-	}
-}()
-	var wg sync.WaitGroup;
-	workerCount := runtime.NumCPU();
-	for i:=1; i<=workerCount; i++ {
-		wg.Add(1)
-		go emailWorker(i, recipientChannel,&wg);
-	}
-	wg.Wait()
-}
+	http.HandleFunc("/api/campaign", handlers.EnableCORS(handlers.HandleCampaign))
 
-func executeTemplate(r Recipient) (string, error) {
-	t, err := template.ParseFiles("email.tmpl")
-	if err != nil {
-		return "", err
-	}
-
-	var tpl bytes.Buffer
-	err = t.Execute(&tpl, r)
-	if err != nil {
-		return "", err
-	}
-	return tpl.String(), nil
+	port := ":8080"
+	fmt.Printf("Server starting on port %s\n", port)
+	log.Fatal(http.ListenAndServe(port, nil))
 }
